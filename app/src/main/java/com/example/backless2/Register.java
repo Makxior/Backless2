@@ -26,7 +26,6 @@ public class Register extends AppCompatActivity {
 
     EditText etName,etMail,etPassword,etReEnter;
     Button btnRegister;
-    Button proba;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
