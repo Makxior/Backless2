@@ -25,7 +25,7 @@ public class Register extends AppCompatActivity {
     private TextView tvLoad;
 
     EditText etName,etMail,etPassword,etReEnter;
-    Button btnRegister;
+    Button btnRegister,btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class Register extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etReEnter = findViewById(R.id.etReEnter);
         btnRegister = findViewById(R.id.btnRegister);
+        btnBack = findViewById(R.id.btnBack);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +82,13 @@ public class Register extends AppCompatActivity {
                         Toast.makeText(Register.this,"Passwords arent the same",Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Register.this.finish();
             }
         });
 

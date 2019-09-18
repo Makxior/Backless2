@@ -18,6 +18,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.local.UserIdStorageFactory;
 
 public class Login extends AppCompatActivity {
 
@@ -28,7 +29,6 @@ public class Login extends AppCompatActivity {
     EditText etMail, etPassword;
     Button btnLogin,btnRegister;
     TextView tvReset;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,8 @@ public class Login extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
         tvReset = findViewById(R.id.tvReset);
+
+        showProgress(true);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +97,8 @@ public class Login extends AppCompatActivity {
                 else{
                     String email = etMail.getText().toString().trim();
                     showProgress(true);
+                    tvLoad.setText("Busy sending reset instructions... please wait...");
+                    
                     Backendless.UserService.restorePassword(email, new AsyncCallback<Void>() {
                         @Override
                         public void handleResponse(Void response) {
@@ -113,9 +117,42 @@ public class Login extends AppCompatActivity {
 
             }
         });
+        tvLoad.setText("Checking login credentials...");
+        Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() { //czy jakiś user juz sie logował
+            @Override
+            public void handleResponse(Boolean response) {
 
+                if(response){ //jeśli tak to czy jest poprawny nadal
+                    String userObjectId = UserIdStorageFactory.instance().getStorage().get();//jak sie logowal to zapisujemy jego name
+                    tvLoad.setText("Loging...");
+                    Backendless.Data.of(BackendlessUser.class).findById(userObjectId, new AsyncCallback<BackendlessUser>() { //czy user nadal jest valid zeby sie zalogowac
+                        @Override
+                        public void handleResponse(BackendlessUser response) {//jeśli tak to logujemy
 
-        //showProgress(true);
+                            startActivity(new Intent(Login.this,MainActivity.class));
+                            Login.this.finish();
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {// jak nie to nie
+                            Toast.makeText(Login.this, "Error"+fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            showProgress(false);
+
+                        }
+                    });
+                }
+                else{// jak nie logowal sie niikt nidgy to nie sie nie dzieje
+                    showProgress(false);
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(Login.this, "Error"+fault.getMessage(), Toast.LENGTH_SHORT).show();
+                showProgress(false);
+
+            }
+        });
     }
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {

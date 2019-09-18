@@ -97,7 +97,17 @@
             android:layout_marginRight="20dp"
             android:background="@drawable/buttons"
             android:text="Register"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/buttons"
+            android:text="BACK"
+            android:textColor="@color/colorPrimaryLight"
             android:textStyle="bold" />
     </LinearLayout>
 
