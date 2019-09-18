@@ -12,6 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 public class Login extends AppCompatActivity {
 
@@ -43,6 +49,31 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if(etMail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty()) {
+                    Toast.makeText(Login.this, "Enter all fiels", Toast.LENGTH_SHORT).show();
+                }
+                else {
+
+                    String email = etMail.getText().toString().trim();
+                    String password = etPassword.getText().toString().trim();
+
+                    showProgress(true);
+
+                    Backendless.UserService.login(email, password, new AsyncCallback<BackendlessUser>() {
+                        @Override
+                        public void handleResponse(BackendlessUser response) {
+                            Toast.makeText(Login.this, "Logged successfully!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(Login.this, MainActivity.class));
+                            Login.this.finish();
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(Login.this, "Error"+fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            showProgress(false);
+                        }
+                    }, true);
+                }
             }
         });
 
