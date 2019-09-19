@@ -11,6 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 public class NewContact extends AppCompatActivity {
 
@@ -38,6 +44,44 @@ public class NewContact extends AppCompatActivity {
         btnNewContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(etMail.getText().toString().isEmpty() || etName.getText().toString().isEmpty()|| etNumber.getText().toString().isEmpty()){
+                    Toast.makeText(NewContact.this, "Please enter all fields", Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                    String name = etName.getText().toString().trim();
+                    String mail = etMail.getText().toString().trim();
+                    String number = etNumber.getText().toString().trim();
+
+                    Contact contact = new Contact();
+                    contact.setName(name);
+                    contact.setEmail(mail);
+                    contact.setNumber(number);
+                    contact.setUserEmail(ApplicationClass.user.getEmail());
+
+                    showProgress(true);
+                    tvLoad.setText("Creating new contact...");
+
+                    Backendless.Persistence.save(contact, new AsyncCallback<Contact>() {
+                        @Override
+                        public void handleResponse(Contact response) {
+                            Toast.makeText(NewContact.this, "New contact saved successfully", Toast.LENGTH_SHORT).show();
+                            showProgress(false);
+                            etName.setText("");
+                            etMail.setText("");
+                            etNumber.setText("");
+
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(NewContact.this, "Something went wrong "+fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            showProgress(false);
+
+                        }
+                    });
+
+                }
 
             }
         });
