@@ -135,12 +135,10 @@ public class Login extends AppCompatActivity {
                             startActivity(new Intent(Login.this,MainActivity.class));
                             Login.this.finish();
                         }
-
                         @Override
                         public void handleFault(BackendlessFault fault) {// jak nie to nie
                             Toast.makeText(Login.this, "Error"+fault.getMessage(), Toast.LENGTH_SHORT).show();
                             showProgress(false);
-
                         }
                     });
                 }
@@ -148,12 +146,10 @@ public class Login extends AppCompatActivity {
                     showProgress(false);
                 }
             }
-
             @Override
             public void handleFault(BackendlessFault fault) {
                 Toast.makeText(Login.this, "Error"+fault.getMessage(), Toast.LENGTH_SHORT).show();
                 showProgress(false);
-
             }
         });
     }

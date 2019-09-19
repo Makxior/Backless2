@@ -49,6 +49,21 @@ public class ContactInfo extends AppCompatActivity {
 
         btnSumbit = findViewById(R.id.btnSubmit);
 
+        etName.setVisibility(View.GONE);
+        etMail.setVisibility(View.GONE);
+        etTel.setVisibility(View.GONE);
+        btnSumbit.setVisibility(View.GONE);
+
+        final int index = getIntent().getIntExtra("index",0); //Wartosc ktora przekazuje ContactList jak klikniemy na element
+
+        etName.setText(ApplicationClass.contacts.get(index).getName());
+        etMail.setText(ApplicationClass.contacts.get(index).getEmail());
+        etTel.setText(ApplicationClass.contacts.get(index).getNumber());
+
+        tvChar.setText(ApplicationClass.contacts.get(index).getName().toUpperCase().charAt(0)+"");
+        tvName.setText(ApplicationClass.contacts.get(index).getName());
+
+
         ivCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
