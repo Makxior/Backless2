@@ -16,7 +16,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
     private Context context;
     private List<Contact> contacts;
 
-    public ContactsAdapter(Context context, List<Contact> list){
+    ContactsAdapter(Context context, List<Contact> list){
         super(context,R.layout.row_layout,list);
         this.context = context;
         this.contacts=list;
@@ -34,11 +34,11 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
         TextView tvName = convertView.findViewById(R.id.tvName);
         TextView tvMail = convertView.findViewById(R.id.tvMail);
 
-        tvChar.setText(contacts.get(position).getName().toUpperCase().charAt(0));
+        tvChar.setText(contacts.get(position).getName().toUpperCase().charAt(0)+"");
         tvName.setText(contacts.get(position).getName());
         tvMail.setText(contacts.get(position).getEmail());
 
 
-        return super.getView(position, convertView, parent);
+        return convertView;
     }
 }
